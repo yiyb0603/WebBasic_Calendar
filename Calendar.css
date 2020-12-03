@@ -1,0 +1,80 @@
+@import url('https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css');
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.Calendar {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	display: -webkit-flex;
+	flex-flow: column wrap;
+	align-items: center;
+	margin-top: 2rem;
+}
+
+.Calendar-Contents {
+	width: 80%;
+	display: flex;
+	display: -webkit-flex;
+	flex-flow: column wrap;
+	align-items: center;
+}
+
+.Calendar-Box {
+	width: 100%;
+	border: 2px solid black;
+	margin-top: 10px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.Calendar-Box-DayNames {
+	display: flex;
+	display: -webkit-flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+	flex-flow: 1;
+	margin-top: 10px;
+	border-bottom: 1px solid black;
+	padding-bottom: 10px;
+}
+
+.Calendar-Box-Days {
+	display: flex;
+	display: -webkit-flex;
+	flex-flow: 1;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.Calendar-Box-Days-Today {
+	background-color: red !important;
+}
+
+.Calendar-Box-Days-NextPrev {
+	background-color: greenyellow !important;
+}
+
+.Calendar-Box-Days > div {
+	width: calc(100% / 7);
+	height: 150px;
+	max-height: 150px;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: center;
+	font-size: 30px;
+	background-color: blue;
+	color: white;
+	border: 1px solid black;
+	transition: 0.25s ease-in-out;
+	cursor: pointer;
+}
+
+.Calendar-Box-Days > div:hover {
+	background-color: black;
+}
