@@ -16,6 +16,10 @@ let selectedYear = nowDate.getFullYear();
 
 let lastMonthDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
 
+const createDiv = () => {
+  return document.createElement('div');
+}
+
 const clickPrev = () => {
   if (selectedMonth - 1 === 0) {
     selectedMonth = 12;
@@ -36,7 +40,7 @@ const clickNext = () => {
     selectedMonth += 1;  
   }
 
-  nowDate = new Date(selectedYear, selectedMonth + 1);
+  nowDate = new Date(selectedYear, selectedMonth - 1);
   onLoad();
 }
 
@@ -54,13 +58,13 @@ const clearData = () => {
   }
 }
 
-const onClickDate = (e) => {
-  if (e !== null) {
-    const otherMonthDay = e.target.id;
+const onClickDate = (event) => {
+  if (event !== null) {
+    const otherMonthDay = event.target.id;
     const otherMonthDayYear = Number(otherMonthDay.split("-")[0]);
     const otherMonthDayMonth = Number(otherMonthDay.split("-")[1]);
 
-    const clickDate = e.target.innerHTML;
+    const clickDate = event.target.innerHTML;
 
     if (!otherMonthDayMonth && !otherMonthDayYear) {
       const makeDate = new Date(selectedYear, selectedMonth - 1, clickDate);
@@ -103,16 +107,45 @@ const onChangeDate = (event) => {
   }
 }
 
-const onLoad = () => {
-  clearData();
-  selectDate.value = `${selectedYear}-${selectedMonth < 10 ? '0' + selectedMonth : selectedMonth}`;
-
+const setDayNames = () => {
   for (let i = 0; i < dayNames.length; i++) {
-    const div = document.createElement('div');
+    const div = createDiv();
+
+    if (i === 0 || i === 6) {
+      div.style.color = '#ea8685';
+    }
+
     div.append(dayNames[i]);
     dayNameElement.appendChild(div);
   }
+}
 
+const calculateFirstDay = (dayCount) => {
+  for (let i = dayCount - 1; i >= 0; i--) {
+    const prevDiv = createDiv();
+
+    const prevDate = new Date(selectedYear, selectedMonth - 1, (i * -1));
+    prevDiv.id = `${prevDate.getFullYear()}-${prevDate.getMonth() + 1}`;
+
+    prevDiv.append(prevDate.getDate());
+    prevDiv.className = "Calendar-Box-Days-NextPrev";
+    daysElement.appendChild(prevDiv);
+  }
+}
+
+const calculateLastDay = (dayCount) => {
+  for (let i = 1; i < (weekDays - dayCount); i++) {
+    const nextDiv = createDiv();
+    const nextDate = new Date(selectedYear, selectedMonth, (i));
+
+    nextDiv.id = `${nextDate.getFullYear()}-${nextDate.getMonth() + 1}`;
+    nextDiv.append(nextDate.getDate());
+    nextDiv.className = "Calendar-Box-Days-NextPrev";
+    daysElement.appendChild(nextDiv);
+  }
+}
+
+const setDates = () => {
   for (let i = 1; i <= lastMonthDay; i++) {
     const dayYear = nowDate.getFullYear();
     const dayMonth = nowDate.getMonth() + 1;
@@ -121,48 +154,38 @@ const onLoad = () => {
 
     const dayCount = dayString.getDay();
     if (i === 1) {
-      for (let i = dayCount - 1; i >= 0; i--) {
-        const prevDiv = document.createElement('div');
-
-        const prevDate = new Date(selectedYear, selectedMonth - 1, (i * -1));
-        prevDiv.id = `${prevDate.getFullYear()}-${prevDate.getMonth() + 1}`;
-
-        prevDiv.append(prevDate.getDate());
-        prevDiv.className = "Calendar-Box-Days-NextPrev";
-        daysElement.appendChild(prevDiv);
-      }
+      calculateFirstDay(dayCount);
     }
 
     const isSameYear = dayString.getFullYear() === currentDate.getFullYear();
     const isSameMonth = dayString.getMonth() === currentDate.getMonth();
-    const isSameDate = dayString.getDate() === currentDate.getDate()
+    const isSameDate = dayString.getDate() === currentDate.getDate();
     
     if (isSameYear && isSameMonth && isSameDate) {
-      const currentDiv = document.createElement('div');
+      const currentDiv = createDiv();
       currentDiv.append(dayString.getDate());
       currentDiv.className = "Calendar-Box-Days-Today";
       daysElement.appendChild(currentDiv);
     }
 
     else {
-      const dateDiv = document.createElement('div');
+      const dateDiv = createDiv();
       dateDiv.nodeValue = dayString.getDate();
       dateDiv.append(dayString.getDate());
       daysElement.appendChild(dateDiv);
     }
 
     if (i === lastMonthDay) {
-      for (let i = 1; i < (weekDays - dayCount); i++) {
-        const nextDiv = document.createElement('div');
-        const nextDate = new Date(selectedYear, selectedMonth, (i));
-
-        nextDiv.id = `${nextDate.getFullYear()}-${nextDate.getMonth() + 1}`;
-        nextDiv.append(nextDate.getDate());
-        nextDiv.className = "Calendar-Box-Days-NextPrev";
-        daysElement.appendChild(nextDiv);
-      }
+      calculateLastDay(dayCount);
     }
   }
+}
+
+const onLoad = () => {
+  clearData();
+  selectDate.value = `${selectedYear}-${selectedMonth < 10 ? '0' + selectedMonth : selectedMonth}`;
+  setDayNames();
+  setDates();
 }
 
 selectDate.addEventListener('change', onChangeDate);
@@ -171,4 +194,4 @@ prevMonth.addEventListener('click', clickPrev);
 nextMonth.addEventListener('click', clickNext);
 daysElement.addEventListener('click', onClickDate);
 
-onLoad();
+onLoad(); 
