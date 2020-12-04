@@ -14,7 +14,7 @@ let nowDate = new Date();
 let selectedMonth = nowDate.getMonth() === new Date().getMonth() ? nowDate.getMonth() + 1 : nowDate.getMonth();
 let selectedYear = nowDate.getFullYear();
 
-let lastMonthDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+let lastMonthDay = new Date(selectedYear, selectedMonth, 0).getDate();
 
 const createDiv = () => {
   return document.createElement('div');
@@ -29,6 +29,7 @@ const clickPrev = () => {
   }
   
   nowDate = new Date(selectedYear, selectedMonth - 1);
+  lastMonthDay = new Date(selectedYear, selectedMonth, 0).getDate();
   onLoad();
 };
 
@@ -41,6 +42,7 @@ const clickNext = () => {
   }
 
   nowDate = new Date(selectedYear, selectedMonth - 1);
+  lastMonthDay = new Date(selectedYear, selectedMonth, 0).getDate();
   onLoad();
 }
 
@@ -60,23 +62,31 @@ const clearData = () => {
 
 const onClickDate = (event) => {
   if (event !== null) {
-    const otherMonthDay = event.target.id;
+    const { id } = event.target;
+
+    const otherMonthDay = id;
     const otherMonthDayYear = Number(otherMonthDay.split("-")[0]);
     const otherMonthDayMonth = Number(otherMonthDay.split("-")[1]);
 
     const clickDate = event.target.innerHTML;
 
     if (!otherMonthDayMonth && !otherMonthDayYear) {
+      // 해당 월의 날짜 클릭했을때
       const makeDate = new Date(selectedYear, selectedMonth - 1, clickDate);
       const subtractTime = makeDate.getTime() - currentDate.getTime();
 
+      if (id.length > 2) {
+        return;
+      }
+
       const diff = Math.ceil(subtractTime / (1000 * 3600 * 24));
-      if (diff !== -0) {
+      if (diff != 0) {
         diff > 0 ? alert(`오늘보다 ${diff}일 후입니다.`) : alert(`오늘보다 ${Number(diff) * -1}일 전입니다.`);
       } else {
         alert('오늘 입니다.');
       }
     } else {
+      // 첫날, 마지막날 옆에 있는 이전달 / 다음달의 날짜를 클릭했을때
       const makeDate = new Date(otherMonthDayYear, otherMonthDayMonth - 1, clickDate);
       const subtractTime = makeDate.getTime() - currentDate.getTime();
 
@@ -86,6 +96,8 @@ const onClickDate = (event) => {
         alert(`오늘보다 ${diff * -1}일 전입니다.`);
       } else if (diff > 0) {
         alert(`오늘보다 ${diff}일 후입니다.`);
+      } else if (diff == 0) {
+        alert('오늘 입니다.');
       }
     }
     
