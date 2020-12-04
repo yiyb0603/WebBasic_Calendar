@@ -10,7 +10,12 @@
 <body>
   <div class="Calendar">
     <div class="Calendar-Contents">
-      <input type ="month" id ="selectDate" />
+      <div class="Calendar-MonthWrapper">
+        <div id="prevMonth"> < </div>
+        <input type ="month" class="Calendar-Date" id ="selectDate" />
+        <div id="nextMonth"> > </div>
+      </div>
+
       <div class="Calendar-Box">
         <div id ="dayNames" class="Calendar-Box-DayNames"></div>
 

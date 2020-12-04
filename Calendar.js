@@ -1,5 +1,8 @@
 const dayNameElement = document.getElementById('dayNames');
 const daysElement = document.getElementById('days');
+
+const prevMonth = document.getElementById('prevMonth');
+const nextMonth = document.getElementById('nextMonth');
 const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
 
 const selectDate = document.getElementById('selectDate');
@@ -12,6 +15,30 @@ let selectedMonth = nowDate.getMonth() === new Date().getMonth() ? nowDate.getMo
 let selectedYear = nowDate.getFullYear();
 
 let lastMonthDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+
+const clickPrev = () => {
+  if (selectedMonth - 1 === 0) {
+    selectedMonth = 12;
+    selectedYear -= 1;
+  } else {
+    selectedMonth -= 1;  
+  }
+  
+  nowDate = new Date(selectedYear, selectedMonth - 1);
+  onLoad();
+};
+
+const clickNext = () => {
+  if (selectedMonth + 1 === 13) {
+    selectedMonth = 1;
+    selectedYear += 1;
+  } else {
+    selectedMonth += 1;  
+  }
+
+  nowDate = new Date(selectedYear, selectedMonth + 1);
+  onLoad();
+}
 
 const clearData = () => {
   if (daysElement.children.length > 0) {
@@ -78,7 +105,7 @@ const onChangeDate = (event) => {
 
 const onLoad = () => {
   clearData();
-  selectDate.defaultValue = `${selectedYear}-${selectedMonth}`;
+  selectDate.value = `${selectedYear}-${selectedMonth < 10 ? '0' + selectedMonth : selectedMonth}`;
 
   for (let i = 0; i < dayNames.length; i++) {
     const div = document.createElement('div');
@@ -139,5 +166,9 @@ const onLoad = () => {
 }
 
 selectDate.addEventListener('change', onChangeDate);
+
+prevMonth.addEventListener('click', clickPrev);
+nextMonth.addEventListener('click', clickNext);
 daysElement.addEventListener('click', onClickDate);
+
 onLoad();

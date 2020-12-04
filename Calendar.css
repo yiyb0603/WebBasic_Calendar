@@ -4,6 +4,7 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: inherit !important;
 }
 
 .Calendar {
@@ -30,6 +31,29 @@
 	margin-top: 10px;
 	overflow-x: hidden;
 	overflow-y: auto;
+}
+
+.Calendar-MonthWrapper {
+	width: 50%;
+	display: flex;
+	display: -webkit-flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.Calendar-MonthWrapper > div {
+	font-size: 30px;
+	padding-bottom: 5px;
+	cursor: pointer;
+}
+
+.Calendar-Date {
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #0090d5;
+	padding-bottom: 5px;
+	font-size: 18px;
 }
 
 .Calendar-Box-DayNames {
